@@ -16,4 +16,5 @@ router.get('/allUser',UserController.findAll)
 router.post('/register', upload.array('imgUrl'), UserController.register)
 router.post('/login', UserController.login)
 
+
 module.exports = router

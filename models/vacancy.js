@@ -53,5 +53,4 @@ VacancySchema.pre('save',function(next){
         .catch(next)
 })
 
-
 module.exports = model('Vancancy',VacancySchema)

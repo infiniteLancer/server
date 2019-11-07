@@ -48,4 +48,5 @@ function authorizationVancancy(req, res, next){
         .catch(next)
 }
 
+
 module.exports = {authentication, authorizationVancancy} 

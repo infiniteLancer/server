@@ -27,4 +27,5 @@ routes.delete('/:id/request',VacancyController.deleteVacancyRequest)
 routes.patch('/:id/takenby',VacancyController.updateVacancyTakenBy)
 routes.delete('/:id/takenby',VacancyController.deleteVacancyTakenBy)
 
+
 module.exports = routes

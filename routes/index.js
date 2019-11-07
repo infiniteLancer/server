@@ -5,4 +5,5 @@ const vacancyRoutes = require('./vacancy')
 router.use('/',userRoutes)
 router.use('/vacancy',vacancyRoutes)
 
+
 module.exports = router
