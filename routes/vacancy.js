@@ -13,6 +13,7 @@ const upload = gcsUpload({
     }
 })
 routes.get('/',VacancyController.findAll)
+
 routes.use(authentication)
 routes.post('/', upload.array('imgUrl') ,VacancyController.createVacancy)
 routes.get('/:id',VacancyController.findByUserId)
