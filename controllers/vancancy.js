@@ -1,4 +1,5 @@
 const VacancyModel = require('../models/vacancy')
+const nodemailer = require('../helpers/mailer')
 
 module.exports = {
     findAll(req,res,next){
@@ -35,7 +36,6 @@ module.exports = {
             .catch(next)
     },
     createVacancy(req,res,next){
-        console.log(req.loggedUser);
         const { _id } = req.loggedUser
         const { name, description, skill , deadline, phone, imgUrl } = req.body
         let reference = imgUrl
@@ -44,6 +44,7 @@ module.exports = {
         VacancyModel.create(vacancy)
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`create vacancy success! at ${new Date()}`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -57,6 +58,7 @@ module.exports = {
         VacancyModel.findOneAndUpdate({ _id : id }, vacancy, { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`update vacancy success! at ${new Date()} [ ${vacancy.name} - ${vacancy.description} - ${vacancy.deadline}]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -67,6 +69,7 @@ module.exports = {
         VacancyModel.findOneAndUpdate({ _id : id }, {$addToSet : { request : _id } }, { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`request is success! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -77,6 +80,7 @@ module.exports = {
         VacancyModel.findOneAndUpdate({ _id : id }, {$pull : { request : _id } }, { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`request delete is success! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -88,6 +92,7 @@ module.exports = {
             .populate('takenBy')
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`vacancy taken! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -98,6 +103,7 @@ module.exports = {
         VacancyModel.findOneAndUpdate({ _id : id }, {$pull: { takenBy : _id }} , { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
+                nodemailer(req.loggedUser.email,`im sorry you have been issued by owner in this project! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -106,6 +112,7 @@ module.exports = {
         const { id } = req.params
         VacancyModel.findOneAndDelete({ _id : id })
             .then(vacancy=>{
+                nodemailer(req.loggedUser.email,`delete project is success! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
             .catch(next)
