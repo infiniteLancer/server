@@ -10,8 +10,7 @@ class UserController {
             .then(result => {
                 let payload = {email:result.email, _id:result._id}
                 let token = generateToken(payload)
-                res.status(201).json({portofolio})
-                // res.status(200).json(result)
+                res.status(200).json({token, username:result.username})
             })
             .catch(next)
     }
