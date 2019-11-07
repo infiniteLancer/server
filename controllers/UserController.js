@@ -14,6 +14,7 @@ class UserController {
                 nodemailer(payload.email,`thanks for registration! at ${new Date()}`)
                 res.status(201).json({portofolio})
                 // res.status(200).json(result)
+                res.status(200).json({token, username:result.username})
             })
             .catch(next)
     }
@@ -49,6 +50,5 @@ class UserController {
           .catch(next)
     }
 }
-
 
 module.exports = UserController
