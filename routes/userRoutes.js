@@ -12,6 +12,7 @@ const upload = gcsUpload({
   }
 })
 
+router.get('/allUser',UserController.findAll)
 router.post('/register', upload.array('imgUrl'), UserController.register)
 router.post('/login', UserController.login)
 router.post('/test', upload.array('imgUrl'), (req, res, next) => {
