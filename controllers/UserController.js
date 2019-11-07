@@ -11,6 +11,7 @@ class UserController {
                 let payload = {email:result.email, _id:result._id}
                 let token = generateToken(payload)
                 res.status(201).json({portofolio})
+                // res.status(200).json(result)
             })
             .catch(next)
     }
@@ -33,6 +34,14 @@ class UserController {
             }
         })
         .catch(next)
+    }
+
+    static findAll(req,res,next){
+        User.find()
+          .then(user=>{
+            res.status(200).json(user)
+          })
+          .catch(next)
     }
 }
 

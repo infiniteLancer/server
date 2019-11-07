@@ -2,7 +2,7 @@ const UserModel = require('./user')
 const mongoose = require('mongoose')
 const { Schema, model } = mongoose
 
-const VancacySchema = new Schema({
+const VacancySchema = new Schema({
     name : {
         type : String,
         require : [true, 'name is required!'],
@@ -23,21 +23,24 @@ const VancacySchema = new Schema({
         type : Date
     },
     UserId : {
-        type : String
+        type : Schema.Types.ObjectId,
+        ref : 'User'
     },
-    takenBy : {
-        type : String
-    },
-    favorite : {
-        type : Array,
-    },
+    takenBy : [{
+        type : Schema.Types.ObjectId,
+        ref : 'User',
+    }],
     phone : {
-        type : Number
-    }
+        type : String
+    },
+    request : [{
+        type : Schema.Types.ObjectId,
+        ref : 'User',
+    }]
 })
 
 VacancySchema.pre('save',function(next){
-    userModel.findOne({ _id : this.UserId})
+    UserModel.findOne({ _id : this.UserId})
         .then(user=>{
             if (!user.phone) {
                 this.phone = 'no phone number please contact by email :)'
@@ -51,4 +54,4 @@ VacancySchema.pre('save',function(next){
 })
 
 
-module.exports = model('Vancancy',VancacySchema)
+module.exports = model('Vancancy',VacancySchema)

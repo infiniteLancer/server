@@ -25,11 +25,10 @@ mongoose.connect(process.env.URL_MONGOOSE, {
     useCreateIndex: true,
     useFindAndModify: false
 })
-    .then(_=> {
-        console.log("mongoodb successfully connect");
-    })
-    .catch(console.log)
-
+.then(_=> {
+    console.log("mongoodb successfully connect");
+})
+.catch(console.log)
 
 app.use(errorHandler)
 

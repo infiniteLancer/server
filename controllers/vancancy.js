@@ -8,6 +8,14 @@ module.exports = {
             })
             .catch(next)
     },
+    findAllById(req,res,next){
+        let { _id } = req.loggedUser
+        VacancyModel.find({ _id })
+            .then(vacancy=>{
+                res.status(200).json(vacancy)
+            })
+            .catch(next)
+    },
     findBySkill(req,res,next){
         const { skill } = req.params
         VacancyModel.find({ skill })
@@ -27,10 +35,13 @@ module.exports = {
             .catch(next)
     },
     createVacancy(req,res,next){
-        const { id } = req.loginboy
-        const { name, description, reference, skill , deadline, phone } = req.body
+        console.log(req.loggedUser);
+        const { _id } = req.loggedUser
+        const { name, description, skill , deadline, phone, imgUrl } = req.body
+        let reference = imgUrl
+        let UserId = _id
         const vacancy = { name, description, reference, skill, deadline, phone, UserId }
-        VacancyModel.find(vacancy)
+        VacancyModel.create(vacancy)
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
                 res.status(200).json(vacancy)
@@ -39,8 +50,10 @@ module.exports = {
     },
     updateVacancy(req,res,next){
         const { id } = req.params
-        const { name, description, reference, skill , deadline, phone } = req.body
-        const vacancy = { name, description, reference, skill, deadline, phone, UserId }
+        console.log(id, 'params');
+        const { name, description, skill , deadline, phone, imgUrl } = req.body
+        let reference = imgUrl
+        const vacancy = { name, description, reference, skill, deadline, phone }
         VacancyModel.findOneAndUpdate({ _id : id }, vacancy, { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
@@ -48,25 +61,53 @@ module.exports = {
             })
             .catch(next)
     },
+    updateVacancyRequest(req,res,next){
+        const { _id } = req.loggedUser
+        const { id } = req.body
+        VacancyModel.findOneAndUpdate({ _id : id }, {$addToSet : { request : _id } }, { new : true })
+            .then(vacancy=>{
+                if(!vacancy) throw { message : 'ga ada guys'}
+                res.status(200).json(vacancy)
+            })
+            .catch(next)
+    },
+    deleteVacancyRequest(req,res,next){
+        const { _id } = req.body
+        const { id } = req.params
+        VacancyModel.findOneAndUpdate({ _id : id }, {$pull : { request : _id } }, { new : true })
+            .then(vacancy=>{
+                if(!vacancy) throw { message : 'ga ada guys'}
+                res.status(200).json(vacancy)
+            })
+            .catch(next)
+    },
     updateVacancyTakenBy(req,res,next){
-        const _id = req.params.id
-        const takenBy = req.loginboy.id
-        const takenBy = { takenBy }
-        VacancyModel.findOneAndUpdate({ _id }, takenBy, { new : true })
+        const { id } = req.params
+        const { _id } = req.body
+        VacancyModel.findOneAndUpdate({ _id : id }, {$addToSet : { takenBy : _id }} , { new : true })
+            .populate('takenBy')
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
                 res.status(200).json(vacancy)
             })
             .catch(next)
     },
-    updateVacancyFavorites(req,res,next){
-        const _id = req.params.id
-        const favorite = req.loginboy.id
-        VacancyModel.findOneAndUpdate({ _id }, { favorite }, { new : true })
+    deleteVacancyTakenBy(req,res,next){
+        const { id } = req.params
+        const { _id } = req.body
+        VacancyModel.findOneAndUpdate({ _id : id }, {$pull: { takenBy : _id }} , { new : true })
             .then(vacancy=>{
                 if(!vacancy) throw { message : 'ga ada guys'}
                 res.status(200).json(vacancy)
             })
             .catch(next)
     },
+    delete(req,res,next){
+        const { id } = req.params
+        VacancyModel.findOneAndDelete({ _id : id })
+            .then(vacancy=>{
+                res.status(200).json(vacancy)
+            })
+            .catch(next)
+    }
 }

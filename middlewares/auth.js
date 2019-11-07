@@ -31,6 +31,7 @@ function authentication(req, res, next){
 function authorizationVancancy(req, res, next){
     Vancancy.findById(req.params.id)
         .then(vancancy => {
+            console.log(vancancy);
             if(!vancancy){
                 next({ status: 404, message: 'Not Found' })
             }
