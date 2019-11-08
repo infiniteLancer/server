@@ -4,6 +4,7 @@ const nodemailer = require('../helpers/mailer')
 module.exports = {
     findAll(req,res,next){
         VacancyModel.find()
+            .populate("UserId")
             .then(vacancy=>{
                 res.status(200).json(vacancy)
             })
@@ -12,6 +13,7 @@ module.exports = {
     findAllById(req,res,next){
         let { _id } = req.loggedUser
         VacancyModel.find({ _id })
+            .populate("UserId")
             .then(vacancy=>{
                 res.status(200).json(vacancy)
             })
@@ -20,6 +22,7 @@ module.exports = {
     findBySkill(req,res,next){
         const { skill } = req.params
         VacancyModel.find({ skill })
+        .populate('UserId')
             .then(vacancy=>{
                 if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 res.status(200).json(vacancy)
@@ -29,6 +32,7 @@ module.exports = {
     findByUserId(req,res,next){
         const { UserId } = req.params
         VacancyModel.find({ UserId })
+        .populate("UserId")
             .then(vacancy=>{
                 if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 res.status(200).json(vacancy)
