@@ -26,10 +26,10 @@ const VacancySchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'User'
     },
-    takenBy : [{
+    takenBy : {
         type : Schema.Types.ObjectId,
         ref : 'User',
-    }],
+    },
     phone : {
         type : String
     },
