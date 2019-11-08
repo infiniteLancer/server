@@ -25,7 +25,6 @@ let userSchema = new Schema({
     },
     portofolio: {
       type:Array,
-      required: [true, 'portofolio is required'],
       validate: {
         validator: function(v) {
           if(v.length > 0){

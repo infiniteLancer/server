@@ -22,9 +22,9 @@ module.exports = {
     findBySkill(req,res,next){
         const { skill } = req.params
         VacancyModel.find({ skill })
-        .populate("UserId")
-        .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+        .populate('UserId')
+            .then(vacancy=>{
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -34,7 +34,7 @@ module.exports = {
         VacancyModel.find({ UserId })
         .populate("UserId")
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 res.status(200).json(vacancy)
             })
             .catch(next)
@@ -47,7 +47,7 @@ module.exports = {
         const vacancy = { name, description, reference, skill, deadline, phone, UserId }
         VacancyModel.create(vacancy)
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`create vacancy success! at ${new Date()}`)
                 res.status(200).json(vacancy)
             })
@@ -61,7 +61,7 @@ module.exports = {
         const vacancy = { name, description, reference, skill, deadline, phone }
         VacancyModel.findOneAndUpdate({ _id : id }, vacancy, { new : true })
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`update vacancy success! at ${new Date()} [ ${vacancy.name} - ${vacancy.description} - ${vacancy.deadline}]`)
                 res.status(200).json(vacancy)
             })
@@ -72,7 +72,7 @@ module.exports = {
         const { id } = req.body
         VacancyModel.findOneAndUpdate({ _id : id }, {$addToSet : { request : _id } }, { new : true })
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`request is success! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
@@ -83,7 +83,7 @@ module.exports = {
         const { id } = req.params
         VacancyModel.findOneAndUpdate({ _id : id }, {$pull : { request : _id } }, { new : true })
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`request delete is success! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
@@ -95,7 +95,7 @@ module.exports = {
         VacancyModel.findOneAndUpdate({ _id : id }, {$addToSet : { takenBy : _id }} , { new : true })
             .populate('takenBy')
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`vacancy taken! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
@@ -106,7 +106,7 @@ module.exports = {
         const { _id } = req.body
         VacancyModel.findOneAndUpdate({ _id : id }, {$pull: { takenBy : _id }} , { new : true })
             .then(vacancy=>{
-                if(!vacancy) throw { message : 'ga ada guys'}
+                if(!vacancy) throw { status: 404, message : 'Vacancy Not Found'}
                 nodemailer(req.loggedUser.email,`im sorry you have been issued by owner in this project! at ${new Date()} [ ${vacancy.name} ]`)
                 res.status(200).json(vacancy)
             })
