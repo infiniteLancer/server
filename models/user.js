@@ -25,11 +25,32 @@ let userSchema = new Schema({
     },
     portofolio: {
       type:Array,
-      required: [true, 'portofolio is required']
+      required: [true, 'portofolio is required'],
+      validate: {
+        validator: function(v) {
+          if(v.length > 0){
+            return true
+          }
+          else{
+            return false
+          }
+        },
+        message: props => `Portofolio required`
+      }
     },
     skill: {
       type:Array,
-      required: [true, 'skill is required']
+      validate: {
+        validator: function(v) {
+          if(v.length > 0){
+            return true
+          }
+          else{
+            return false
+          }
+        },
+        message: props => `Skill required`
+      }
     }
 }, 
 {
