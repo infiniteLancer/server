@@ -13,11 +13,31 @@ const VacancySchema = new Schema({
     },
     reference : {
         type : Array,
-        required : [true, 'reference is required!']
+        validate: {
+            validator: function(v) {
+                if(v.length > 0){
+                    return true
+                }
+                else{
+                    return false
+                }
+            },
+            message: props => `Reference is required`
+        }
     },
     skill : {
         type : Array,
-        required : [true, 'skill is required!']
+        validate: {
+            validator: function(v) {
+                if(v.length > 0){
+                    return true
+                }
+                else{
+                    return false
+                }
+            },
+            message: props => `Requirement is required!`
+        }
     },
     deadline : {
         type : Date
